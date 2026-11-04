@@ -1,4 +1,4 @@
-# KCHER
+# K_CHER
 
 [![codecov](https://codecov.io/gh/lyndorind/K_CHER/graph/badge.svg)](https://codecov.io/gh/lyndorind/K_CHER)
 

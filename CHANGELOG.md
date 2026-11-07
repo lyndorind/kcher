@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.1] - 2026-11-07
+### Added
+- `docker-compose.observability.yml`: стек Grafana, Loki, Tempo, Prometheus та OpenTelemetry Collector (contrib) з томами для персистентності даних; пароль адміністратора Grafana передається через Docker secret
+- Конфігурація OpenTelemetry Collector (`observability/otel-collector.yaml`): приймає OTLP від сервісу, трейси надсилає в Tempo, метрики в Prometheus, логи в Loki
+- Автоматичне додавання джерел даних Grafana (provisioning): Prometheus, Loki, Tempo
+
+### Changed
+- Інструментування бази даних: замість `opentelemetry-instrumentation-sqlalchemy` (не підтримує SQLAlchemy 2.1) використано `opentelemetry-instrumentation-psycopg`, у трейсах з'явились спани SQL-запитів
+- Запити `/health` виключено з трейсів (`OTEL_PYTHON_FASTAPI_EXCLUDED_URLS`)
+
 ## [1.5.0] - 2026-11-07
 ### Added
 - Інструментування сервісу OpenTelemetry: автоматичні трейси FastAPI і SQLAlchemy, експорт логів, власні метрики `kcher.calculations` та `kcher.calculation_errors`

@@ -1,6 +1,6 @@
 """Навчальний пакет для практичної з GitHub Actions."""
 
-__version__ = "1.4.4"
+__version__ = "1.5.0"
 
 
 def hello(name: str = "world") -> str:

@@ -39,7 +39,12 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/app/.venv/bin:$PATH" \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    OTEL_SERVICE_NAME=kcher \
+    OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true \
+    OTEL_TRACES_EXPORTER=none \
+    OTEL_METRICS_EXPORTER=none \
+    OTEL_LOGS_EXPORTER=none
 
 # Створюємо непривілейованого користувача
 RUN useradd --system --uid 10001 --no-create-home appuser
@@ -58,4 +63,4 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"
 
-CMD ["uvicorn", "k_cher.api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["opentelemetry-instrument", "uvicorn", "k_cher.api:app", "--host", "0.0.0.0", "--port", "8000"]

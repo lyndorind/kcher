@@ -1,0 +1,55 @@
+# OpenTelemetry Collector (contrib): приймає OTLP від застосунку і розподіляє
+# трейси, метрики та логи по відповідних сервісах.
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 256
+  resource:
+    attributes:
+      - key: deployment.environment
+        value: lab
+        action: upsert
+  batch:
+    timeout: 5s
+
+exporters:
+  # Трейси -> Tempo
+  otlp/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+  # Метрики -> Prometheus (remote write)
+  prometheusremotewrite:
+    endpoint: http://prometheus:9090/api/v1/write
+    resource_to_telemetry_conversion:
+      enabled: true
+  # Логи -> Loki (вбудований OTLP-ендпоінт Loki 3)
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp
+  # Короткий вивід у лог Collector для налагодження
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlp/tempo, debug]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [prometheusremotewrite]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlphttp/loki]

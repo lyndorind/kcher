@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0] - 2026-11-07
+### Added
+- Інструментування сервісу OpenTelemetry: автоматичні трейси FastAPI і SQLAlchemy, експорт логів, власні метрики `kcher.calculations` та `kcher.calculation_errors`
+- Налаштування логування застосунку (`k_cher.logging_config`) і тести логування
+
+### Changed
+- Dockerfile: запуск через `opentelemetry-instrument`, змінні `OTEL_*` (експорт вимкнено за замовчуванням)
+- Додано залежності `opentelemetry-*`
+
 ## [1.4.4] - 2026-11-01
 ### Added
 - Конфігурація навантажувального тестування Apache JMeter: `jmeter/kcher-load-test.jmx` (параметри користувачів, розгону і тривалості через `-J`)

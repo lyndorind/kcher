@@ -1,0 +1,13 @@
+# Автоматичне завантаження дашбордів у Grafana (provisioning)
+apiVersion: 1
+
+providers:
+  - name: kcher
+    orgId: 1
+    folder: K_CHER
+    type: file
+    disableDeletion: false
+    allowUiUpdates: true
+    updateIntervalSeconds: 30
+    options:
+      path: /etc/grafana/provisioning/dashboards

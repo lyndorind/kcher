@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.5.2] - 2026-11-08
+### Added
+- Grafana dashboard `K_CHER Overview` та правила алертів (`many rejected calculations`, `high p95 latency`) через provisioning.
+
 ## [1.5.1] - 2026-11-07
 ### Added
 - `docker-compose.observability.yml`: стек Grafana, Loki, Tempo, Prometheus та OpenTelemetry Collector (contrib) з томами для персистентності даних; пароль адміністратора Grafana передається через Docker secret

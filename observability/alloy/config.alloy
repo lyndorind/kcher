@@ -1,0 +1,51 @@
+// Прийом OTLP від OpenTelemetry Collector
+otelcol.receiver.otlp "default" {
+  grpc {
+    endpoint = "0.0.0.0:4317"
+  }
+  http {
+    endpoint = "0.0.0.0:4318"
+  }
+  output {
+    metrics = [otelcol.processor.batch.default.input]
+    logs    = [otelcol.processor.batch.default.input]
+    traces  = [otelcol.processor.batch.default.input]
+  }
+}
+
+otelcol.processor.batch "default" {
+  output {
+    metrics = [otelcol.exporter.otlphttp.grafana_cloud.input]
+    logs    = [otelcol.exporter.otlphttp.grafana_cloud.input]
+    traces  = [otelcol.exporter.otlphttp.grafana_cloud.input]
+  }
+}
+
+// Доставка в Grafana Cloud (OTLP-шлюз)
+otelcol.auth.basic "grafana_cloud" {
+  username = sys.env("GCLOUD_OTLP_INSTANCE_ID")
+  password = sys.env("GCLOUD_RW_API_KEY")
+}
+
+otelcol.exporter.otlphttp "grafana_cloud" {
+  client {
+    endpoint = sys.env("GCLOUD_OTLP_ENDPOINT")
+    auth     = otelcol.auth.basic.grafana_cloud.handler
+  }
+}
+
+// Реєстрація у Fleet Management
+remotecfg {
+  url            = sys.env("GCLOUD_FM_URL")
+  id             = sys.env("GCLOUD_FM_COLLECTOR_ID")
+  poll_frequency = "60s"
+  attributes = {
+    "environment" = "lab",
+    "service"     = "kcher",
+  }
+
+  basic_auth {
+    username = sys.env("GCLOUD_FM_USERNAME")
+    password = sys.env("GCLOUD_RW_API_KEY")
+  }
+}

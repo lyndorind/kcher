@@ -16,8 +16,29 @@ services:
     depends_on:
       otel-collector:
         condition: service_started
+  alloy:
+    image: grafana/alloy:v1.11.0
+    container_name: kcher-alloy
+    restart: unless-stopped
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    environment:
+      GCLOUD_RW_API_KEY: ${GCLOUD_RW_API_KEY}
+      GCLOUD_FM_COLLECTOR_ID: kcher-alloy
+      GCLOUD_FM_URL: ${GCLOUD_FM_URL}
+      GCLOUD_FM_USERNAME: ${GCLOUD_FM_USERNAME}
+      GCLOUD_OTLP_ENDPOINT: ${GCLOUD_OTLP_ENDPOINT}
+      GCLOUD_OTLP_INSTANCE_ID: ${GCLOUD_OTLP_INSTANCE_ID}
+    ports:
+      - "12345:12345"
+    volumes:
+      - ./observability/alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - alloy-data:/var/lib/alloy/data
 
-  otel-collector:
+    otel-collector:
     image: otel/opentelemetry-collector-contrib:0.120.0
     container_name: kcher-otel-collector
     restart: unless-stopped
@@ -27,6 +48,7 @@ services:
       - loki
       - tempo
       - prometheus
+      - alloy
 
   prometheus:
     image: prom/prometheus:v3.2.1
@@ -98,3 +120,4 @@ volumes:
   loki-data:
   tempo-data:
   grafana-data:
+  alloy-data:

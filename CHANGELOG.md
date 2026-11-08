@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.3] - 2026-11-08
+### Added
+- Grafana Alloy в observability-стеку: прийом OTLP від OpenTelemetry Collector і доставка телеметрії в Grafana Cloud.
+- Реєстрація Alloy у Fleet Management (`remotecfg`) та самомоніторинг агента.
+
+### Changed
+- OpenTelemetry Collector додатково експортує трейси, метрики та логи в Alloy.
+
 ## [1.5.2] - 2026-11-08
 ### Added
 - Grafana dashboard `K_CHER Overview` та правила алертів (`many rejected calculations`, `high p95 latency`) через provisioning.

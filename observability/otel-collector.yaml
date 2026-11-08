@@ -38,18 +38,23 @@ exporters:
   # Короткий вивід у лог Collector для налагодження
   debug:
     verbosity: basic
+  # Телеметрія -> Grafana Alloy -> Grafana Cloud
+  otlp/alloy:
+    endpoint: alloy:4317
+    tls:
+      insecure: true
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [memory_limiter, resource, batch]
-      exporters: [otlp/tempo, debug]
+      exporters: [otlp/tempo, otlp/alloy, debug]
     metrics:
       receivers: [otlp]
       processors: [memory_limiter, resource, batch]
-      exporters: [prometheusremotewrite]
+      exporters: [prometheusremotewrite, otlp/alloy]
     logs:
       receivers: [otlp]
       processors: [memory_limiter, resource, batch]
-      exporters: [otlphttp/loki]
+      exporters: [otlphttp/loki, otlp/alloy]

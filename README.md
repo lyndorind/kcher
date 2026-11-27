@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/lyndorind/K_CHER/graph/badge.svg)](https://codecov.io/gh/lyndorind/K_CHER)
 
 ## Опис
-У цьому репозиторії зберігаються файли, створені під час виконання практичних завдань з роботи з системою контролю версій Git та платформою GitHub.
+У цьому репозиторії зберігаються матеріали та результати виконання практичних завдань з Git і GitHub.
 
 ## Основні файли
 
@@ -34,3 +34,4 @@
 3. Перевірте: `curl http://localhost:8000/ready`
 
 Дані PostgreSQL зберігаються в томі `pgdata`. Видалити їх разом із контейнерами: `docker compose down -v`.
+ 
